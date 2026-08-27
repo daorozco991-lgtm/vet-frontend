@@ -13,6 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Add } from "@mui/icons-material";
 import { Button } from "@mui/material";
+import VozButton from "../VozButton";
 
 const drawerWidth = 240;
 
@@ -65,6 +66,7 @@ interface Props {
   create: () => void;
   onMenuClick: () => void;
   pageTitle?: string;
+  busquedaVoz: () => void
 }
 
 export default function TopBar({
@@ -72,6 +74,7 @@ export default function TopBar({
   search,
   create,
   onMenuClick,
+  busquedaVoz,
   pageTitle = "",
 }: Props) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -106,6 +109,7 @@ export default function TopBar({
           boxShadow: 4,
         }}
       >
+
         <Toolbar>
           <IconButton
             color="inherit"
@@ -215,6 +219,7 @@ export default function TopBar({
           Nuevo
         </MenuItem>
       </Menu>
+            <VozButton recargarCitas={() => busquedaVoz()}></VozButton>
     </Box>
   );
 }

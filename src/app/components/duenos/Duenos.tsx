@@ -7,7 +7,7 @@ import { MascotaForm } from "../formularios/MascotaForm";
 
 import { Box, CircularProgress } from "@mui/material";
 import mascotaService from "../../services/mascota.service";
-import { useLayoutContext } from "../Layout.context";
+import { useLayoutContext } from "../../hooks/useLayoutContext";
 
 export function DuenosPage() {
   const [duenos, setDuenos] = useState<Dueno[] | null>(null);

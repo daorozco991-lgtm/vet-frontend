@@ -5,6 +5,9 @@ export type LayoutContext = {
   setBusqueda: (value: string) => void;
   openCreateModal: boolean;
   setOpenCreateModal: (value: boolean) => void;
+  busquedaVoz: boolean;
+  setBusquedaVoz: (value:boolean) => void
+  
 };
 
 export const DRAWER_WIDTH = 240;

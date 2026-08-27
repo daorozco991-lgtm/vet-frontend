@@ -3,21 +3,16 @@ import { Box, CssBaseline, Drawer, Toolbar } from "@mui/material";
 import TopBar from "../header/Topbar";
 import { useState } from "react";
 import { DrawerComponent } from "../header/DrawerComponent";
+import type { LayoutContext } from "../../types/layout.types";
 
 const drawerWidth = 240;
 
-type LayoutContext = {
-  mobileOpen: boolean;
-  handleDrawerToggle: () => void;
-  busqueda: string;
-  setBusqueda: (value: string) => void;
-  openCreateModal: boolean;
-  setOpenCreateModal: (value: boolean) => void;
-};
 
 export const Layout = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [busqueda, setBusqueda] = useState("");
+  const [busquedaVoz, setBusquedaVoz] = useState(false);
+
   const [openCreateModal, setOpenCreateModal] = useState(false);
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
@@ -28,6 +23,7 @@ export const Layout = () => {
 
       <TopBar
         busqueda={busqueda}
+        busquedaVoz={() => {setBusquedaVoz(!busquedaVoz)}}
         search={(val: string) => setBusqueda(val)}
         create={() => setOpenCreateModal(true)}
         onMenuClick={handleDrawerToggle}
@@ -96,11 +92,21 @@ export const Layout = () => {
                 setBusqueda,
                 openCreateModal,
                 setOpenCreateModal,
+                busquedaVoz,
+                setBusquedaVoz
               } satisfies LayoutContext
             }
           />{" "}
         </Box>
       </Box>
+      <div
+    style={{
+        position: "fixed",
+        bottom: 30,
+        right: 30
+    }}
+>
+</div>
     </Box>
   );
 };

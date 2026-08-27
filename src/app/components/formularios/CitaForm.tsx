@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import mascotaService from "../../services/mascota.service";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+import { FormHelperText } from "@mui/material";
 import type { SelectOption } from "../../models/SelectOption";
 
 interface CitaFormProps {
@@ -60,8 +61,14 @@ export const CitaForm = ({
     minute: "2-digit",
     hour12: false,
   });
+  const horaActualDoce = ahora.toLocaleTimeString("es-CO", {
+    timeZone: "America/Bogota",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 
-  const minHora = formData.fecha === fechaHoy ? horaActual : "00:00";
+  // const minHora = formData.fecha === fechaHoy ? horaActual : "00:00";
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -72,10 +79,18 @@ export const CitaForm = ({
     }));
   };
 
+  const validarFecha = () => {
+    if (formData.fecha === "") {
+      return true;
+    }
+    if (formData.fecha < fechaHoy) {
+      return false;
+    }
+  };
+
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setTouched(true);
-
     const motivoError = formData.motivo === "";
     const mascotaError = formData.mascotaId === null;
     const fechaError = formData.fecha === "" || formData.fecha < fechaHoy;
@@ -99,7 +114,7 @@ export const CitaForm = ({
       .then(setOpciones)
       .catch((error) => console.error("Error al cargar mascotas:", error))
       .finally(() => setLoadingMascotas(false));
-    }, []);
+  }, []);
   return (
     <div className="form-overlay">
       <div className="form-container">
@@ -151,6 +166,19 @@ export const CitaForm = ({
                   />
                 )}
               />
+              <FormHelperText
+                style={{
+                  visibility:
+                    touched && formData.mascotaId === null
+                      ? "visible"
+                      : "hidden",
+                }}
+                error
+              >
+                {touched && formData.mascotaId === null
+                  ? `Seleccione una mascota`
+                  : ""}
+              </FormHelperText>
             </div>
           )}
 
@@ -163,29 +191,65 @@ export const CitaForm = ({
                   : ""
               }
               type="date"
-              min={fechaHoy}
+              // min={fechaHoy}
               name="fecha"
               value={formData.fecha}
               onChange={handleChange}
             />
+            <FormHelperText
+              style={{
+                visibility:
+                  (touched && formData.fecha < fechaHoy) ||
+                  formData.fecha === null
+                    ? "visible"
+                    : "hidden",
+              }}
+              error
+            >
+              {validarFecha()
+                ? "La fecha es obligatoria"
+                : `La fecha debe ser posterior a ${fechaHoy}`}
+            </FormHelperText>
           </div>
-
           <div className="form-group">
             <label>Hora</label>
             <input
               className={
                 touched &&
                 (formData.hora === "" ||
+                  formData.fecha < fechaHoy ||
                   (formData.fecha === fechaHoy && formData.hora < horaActual))
                   ? "error"
                   : ""
               }
               type="time"
               name="hora"
-              min={touched ? minHora : "00:00"}
+              // min={touched ? minHora : "00:00"}
               value={formData.hora}
               onChange={handleChange}
             />
+            <FormHelperText
+              style={{
+                visibility:
+                  touched &&
+                  (formData.hora === "" ||
+                    formData.fecha < fechaHoy ||
+                    (formData.fecha === fechaHoy && formData.hora < horaActual))
+                    ? "visible"
+                    : "hidden",
+              }}
+              error
+            >
+              {touched && formData.hora === ""
+                ? "La hora es obligatoria"
+                : touched && formData.fecha && formData.fecha < fechaHoy
+                  ? `Revisa la fecha debe ser posterior a ${fechaHoy}`
+                  : touched &&
+                      formData.fecha === fechaHoy &&
+                      formData.hora < horaActual
+                    ? `La hora debe ser posterior a ${horaActualDoce}`
+                    : "Seleccione fecha"}
+            </FormHelperText>
           </div>
 
           <div className="form-group">
@@ -198,6 +262,17 @@ export const CitaForm = ({
               onChange={handleChange}
               placeholder="Ej: Vacunación"
             />
+            <FormHelperText
+              style={{
+                visibility:
+                  touched && formData.motivo === "" ? "visible" : "hidden",
+              }}
+              error
+            >
+              {touched && formData.motivo === ""
+                ? `El motivo es obligatorio`
+                : ""}
+            </FormHelperText>
           </div>
 
           <div className="form-buttons">

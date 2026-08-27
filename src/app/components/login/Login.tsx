@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, FormHelperText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
+import "./../../styles/global.css";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -11,24 +12,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const [error, setError] = useState("");
+  const [mensajeError, setMensajeError] = useState(false);
 
   const [disabled, setDisabled] = useState(false);
 
   const iniciarSesion = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMensajeError(true);
     setError("");
+    setUserName("admin")
+    setPassword("admin")
 
-    if (userName === "" || password === "") {
-      setError("Complete todos los campos");
-      return;
-    }
+    //  if (userName === "" || password === "") {
+    //   return;
+    //  }
 
     setDisabled(true);
 
     try {
       const response = await authService.login({
-        userName,
-        password,
+        userName:"admin",
+        password:"admin",
       });
 
       localStorage.setItem("token", response.token);
@@ -106,11 +110,18 @@ export default function LoginPage() {
             <input
               type="text"
               placeholder="Usuario"
-              value={userName}
+              value={"admin"}
               onChange={(e) => setUserName(e.target.value)}
               disabled={disabled}
-              className={`login-input ${userName === "" && error !== "" ? "error" : ""}`}
+              className={`login-input ${mensajeError && userName ==="" ? "error" : ""}`}
             />
+            <FormHelperText
+           sx={{mt:"5px"}}
+
+              error
+            >
+              {mensajeError && userName ==="" ? `Ingrese el usuario` : ""}
+            </FormHelperText>
           </div>
 
           <div className="login-field">
@@ -129,11 +140,14 @@ export default function LoginPage() {
             <input
               type="password"
               placeholder="Contraseña"
-              value={password}
+              value={"admin"}
               onChange={(e) => setPassword(e.target.value)}
               disabled={disabled}
-              className={`login-input ${password === "" && error !== "" ? "error" : ""}`}
+              className={`login-input ${mensajeError && password === "" ? "error" : ""}`}
             />
+            <FormHelperText  error>
+              {mensajeError && password === "" ? `Ingrese la contraseña` : ""}
+            </FormHelperText>
           </div>
 
           <p className="login-error" aria-live="polite">
@@ -154,7 +168,11 @@ export default function LoginPage() {
 
         <div className="login-link-row">
           <span>¿No tienes cuenta?</span>
-          <button type="button" className="login-link-button" onClick={() => navigate("/register")}>
+          <button
+            type="button"
+            className="login-link-button"
+            onClick={() => navigate("/register")}
+          >
             Regístrate
           </button>
         </div>

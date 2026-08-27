@@ -35,7 +35,7 @@ body {
     -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background: linear-gradient(180deg, rgba(30, 136, 229, 0.08) 0%, #f8fafc 70%);
   color: var(--c-text);
-  line-height: 1.5;
+  line-formhelpertextight: 1.5;
   min-height: 100vh;
 }
 
@@ -262,6 +262,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  height: max-content;
 }
 .login-field {
   position: relative;
@@ -351,6 +352,13 @@ body {
   backdrop-filter: blur(4px);
 }
 
+.MuiFormHelperText-root {
+  margin: 5px 0px 0px 0px !important;
+  font-size: 11px !important;
+  line-height: 12px !important;
+  height: 10px;
+  padding: 0;
+}
 .form-container {
   background: white;
   border-radius: var(--rl);
@@ -401,12 +409,6 @@ body {
   background: var(--c-hover);
   color: var(--c-text);
 }
-input.error,
-input:invalid {
-  border: 1px solid var(--danger);
-  background: var(--danger-light);
-}
-
 .form {
   padding: 1.5rem;
   display: flex;
@@ -417,7 +419,7 @@ input:invalid {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+
 }
 
 .form-group label {
@@ -443,10 +445,11 @@ input:invalid {
   border-color: var(--c-blue);
   box-shadow: 0 0 0 3px rgba(66, 165, 245, 0.2);
 }
-
 .form-group input.error,
-.login-input.error input:invalid {
-  border-color: #dc2626;
+.login-form input.error,
+.login-input.error  {
+  border: 1px solid #dc2626;
+
 }
 
 .form-buttons {

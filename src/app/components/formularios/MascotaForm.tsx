@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import type { MascotaUpdate } from "../../models/Mascota";
 import CloseIcon from "@mui/icons-material/Close";
-import { Autocomplete, CircularProgress, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  CircularProgress,
+  FormHelperText,
+  TextField,
+} from "@mui/material";
 import duenoService from "../../services/dueno.service";
 import type { SelectOption } from "../../models/SelectOption";
 
@@ -129,6 +134,19 @@ export const MascotaForm = ({
               value={formData.nombreMascota}
               onChange={handleChange}
             />
+            <FormHelperText
+              style={{
+                visibility:
+                  touched && formData.nombreMascota === ""
+                    ? "visible"
+                    : "hidden",
+              }}
+              error
+            >
+              {touched && formData.nombreMascota === ""
+                ? `El nombre es obligatorio`
+                : ""}
+            </FormHelperText>
           </div>
 
           <div className="form-group">
@@ -140,6 +158,15 @@ export const MascotaForm = ({
               value={formData.raza}
               onChange={handleChange}
             />
+            <FormHelperText
+              style={{
+                visibility:
+                  touched && formData.raza === "" ? "visible" : "hidden",
+              }}
+              error
+            >
+              {touched && formData.raza === "" ? `La raza es obligatoria` : ""}
+            </FormHelperText>
           </div>
 
           <div className="form-group">
@@ -153,11 +180,23 @@ export const MascotaForm = ({
                   : ""
               }
               type="date"
-              max={fechaHoy}
+              // max={fechaHoy}
               name="fechaNacimiento"
               value={formData.fechaNacimiento}
               onChange={handleChange}
             />
+            <FormHelperText
+              style={{
+                visibility:
+                  touched && formData.fechaNacimiento === "" ||  formData.fechaNacimiento > fechaHoy
+                    ? "visible"
+                    : "hidden",
+              }}
+              error
+            >
+              {touched && formData.fechaNacimiento === "" ? "La fecha de nacimiento es obligatoria" :
+                formData.fechaNacimiento > fechaHoy ? `La fecha de nacimiento no puede ser posterior a ${fechaHoy}`:""}
+            </FormHelperText>
           </div>
 
           {!isEdit && (
@@ -199,6 +238,17 @@ export const MascotaForm = ({
                   />
                 )}
               />
+              <FormHelperText
+                style={{
+                  visibility:
+                    touched && formData.duenoId == null ? "visible" : "hidden",
+                }}
+                error
+              >
+                {touched && formData.duenoId == null
+                  ? `El id es obligatorio`
+                  : ""}
+              </FormHelperText>
             </div>
           )}
 

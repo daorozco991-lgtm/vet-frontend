@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, FormHelperText } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { authService } from "../../services/authService";
 
@@ -11,15 +11,15 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [mensajeError, setMensajeError] = useState(false);
 
   const registrarUsuario = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-
+    setMensajeError(true);
     if (name === "" || userName === "" || password === "") {
-      setError("Complete todos los campos");
       return;
     }
+    setError("");
 
     setDisabled(true);
 
@@ -37,7 +37,7 @@ export default function RegisterPage() {
       alert("Registro exitoso, Inice sesión");
       navigate("/login");
     } catch (error: unknown) {
-        alert((error as Error).message);
+      alert((error as Error).message);
       setError((error as Error).message);
     } finally {
       setDisabled(false);
@@ -109,8 +109,11 @@ export default function RegisterPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               disabled={disabled}
-              className={`login-input ${name === "" && error !== "" ? "error" : ""}`}
+              className={`login-input ${name === "" && mensajeError ? "error" : ""}`}
             />
+            <FormHelperText sx={{ mt: "5px" }} error>
+              {mensajeError && name === "" ? `Ingrese su nombre` : ""}
+            </FormHelperText>
           </div>
 
           <div className="login-field">
@@ -132,8 +135,11 @@ export default function RegisterPage() {
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
               disabled={disabled}
-              className={`login-input ${userName === "" && error !== "" ? "error" : ""}`}
+              className={`login-input ${userName === ""&& mensajeError ? "error" : ""}`}
             />
+            <FormHelperText sx={{ mt: "50px" }} error>
+              {mensajeError && userName === "" ? `Ingrese su usuario` : ""}
+            </FormHelperText>
           </div>
 
           <div className="login-field">
@@ -155,8 +161,11 @@ export default function RegisterPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               disabled={disabled}
-              className={`login-input ${password === "" && error !== "" ? "error" : ""}`}
+              className={`login-input ${password === "" && mensajeError ? "error" : ""}`}
             />
+            <FormHelperText sx={{ mt: "5px" }} error>
+              {mensajeError && password === "" ? `Ingrese la contraseña` : ""}
+            </FormHelperText>
           </div>
 
           <p className="login-error" aria-live="polite">
@@ -177,7 +186,11 @@ export default function RegisterPage() {
 
         <div className="login-link-row">
           <span>¿Ya tienes cuenta?</span>
-          <button type="button" className="login-link-button" onClick={() => navigate("/login")}>
+          <button
+            type="button"
+            className="login-link-button"
+            onClick={() => navigate("/login")}
+          >
             Inicia sesión
           </button>
         </div>

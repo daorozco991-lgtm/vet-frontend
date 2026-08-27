@@ -12,7 +12,8 @@ export function CitasPage() {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { busqueda, openCreateModal, setOpenCreateModal } = useLayoutContext();
+  const { busqueda, openCreateModal, setOpenCreateModal, busquedaVoz } =
+    useLayoutContext();
   const [citaEditada, setCitaEditada] = useState<Cita | null>(null);
 
   const buscarCitas = async (termino: string) => {
@@ -34,15 +35,14 @@ export function CitasPage() {
   };
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (busqueda.trim()) {
-        buscarCitas(busqueda);
-      } else {
-        buscarCitas("");
-      }
+ 
+      buscarCitas(busqueda)
+    
+    
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [busqueda,openEditModal, openCreateModal]);
+  }, [busqueda, busquedaVoz]);
 
   const createCita = async (cita: CitaUpdate) => {
     try {
@@ -139,7 +139,8 @@ export function CitasPage() {
             onDelete(citaEditada.id);
           }}
         />
-      )}
+      )}    
+
     </div>
   );
 }
